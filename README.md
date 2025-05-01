@@ -141,6 +141,20 @@ GET /patients?limit=10&offset=20
 
 ---
 
+### unknown field LeftDelim and RightDelim error?!
+When you run:
+```bash
+swag init -g cmd/main.go
+```
+You’ll see the generated docs/docs.go file includes this:
+```bash
+LeftDelim: "{{",
+RightDelim: "}}",
+```
+These lines are totally normal — they’re part of the internal template engine that swaggo uses. 
+You can ignore/delete them; they have no effect on how your Swagger UI looks or functions.
+
+---
 ## 📎 Notes
 
 - Swagger UI is available at [http://localhost:8080/swagger/index.html](http://localhost:8080/swagger/index.html)
