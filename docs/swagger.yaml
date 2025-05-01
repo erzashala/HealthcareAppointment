@@ -1,0 +1,311 @@
+basePath: /
+definitions:
+  models.Appointment:
+    properties:
+      date_time:
+        description: |-
+          DateTime is the appointment time in RFC3339 format
+
+          required: true
+        example: "2025-06-01T15:00:00Z"
+        type: string
+      patient_id:
+        description: |-
+          PatientID links the appointment to a patient
+
+          required: true
+        example: 1
+        type: integer
+      reason:
+        description: |-
+          Reason for the appointment
+
+          required: true
+        example: Routine checkup
+        type: string
+    required:
+    - date_time
+    - patient_id
+    - reason
+    type: object
+  models.Patient:
+    properties:
+      email:
+        description: Email of the patient
+        example: erza@example.com
+        type: string
+      name:
+        description: Name of the patient
+        example: Erza Shala
+        minLength: 2
+        type: string
+    required:
+    - email
+    - name
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: REST API for managing patients and appointments
+  title: Healthcare Appointment API
+  version: "1.0"
+paths:
+  /appointments:
+    get:
+      parameters:
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Offset
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Appointment'
+            type: array
+      summary: Get all appointments with pagination
+      tags:
+      - appointments
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Appointment data
+        in: body
+        name: appointment
+        required: true
+        schema:
+          $ref: '#/definitions/models.Appointment'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Appointment'
+        "400":
+          description: Appointment time must be in the future
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Create a new appointment
+      tags:
+      - appointments
+  /appointments/{id}:
+    delete:
+      parameters:
+      - description: Appointment ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Delete an appointment by ID
+      tags:
+      - appointments
+    get:
+      parameters:
+      - description: Appointment ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Appointment'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get an appointment by ID
+      tags:
+      - appointments
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: Appointment ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Updated appointment data
+        in: body
+        name: appointment
+        required: true
+        schema:
+          $ref: '#/definitions/models.Appointment'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Appointment'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Update an appointment by ID
+      tags:
+      - appointments
+  /patients:
+    get:
+      parameters:
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Offset
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Patient'
+            type: array
+      summary: List all patients with pagination
+      tags:
+      - patients
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Patient data
+        in: body
+        name: patient
+        required: true
+        schema:
+          $ref: '#/definitions/models.Patient'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Patient'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Create a new patient
+      tags:
+      - patients
+  /patients/{id}:
+    delete:
+      parameters:
+      - description: Patient ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Delete a patient by ID
+      tags:
+      - patients
+    get:
+      parameters:
+      - description: Patient ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Patient'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get a patient by ID
+      tags:
+      - patients
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: Patient ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Updated patient data
+        in: body
+        name: patient
+        required: true
+        schema:
+          $ref: '#/definitions/models.Patient'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Patient'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Update a patient by ID
+      tags:
+      - patients
+swagger: "2.0"
